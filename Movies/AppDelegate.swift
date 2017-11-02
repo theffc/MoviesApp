@@ -16,37 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let provider = MoyaProvider<OmdbApi>()
-        
-        provider.request(.searchMovie(title: "batman", page: 1)) { (result) in
-            switch result {
-            case let .failure(error):
-                print(error)
-            case let .success(value):
-                do {
-                    let r = try value.map(SearchResult.self)
-                    print(r)
-                }
-                catch {
-                    print(error)
-                }
-            }
-        }
-        
-        provider.request(.movie(id: "tt0096895")) { (result) in
-            switch result {
-            case let .failure(error):
-                print(error)
-            case let .success(value):
-                do {
-                    let r = try value.map(Movie.self)
-                    print(r)
-                } catch {
-                    print(error)
-                }
-            }
-            
-        }
         
         return true
     }

@@ -19,6 +19,7 @@
 		6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */; };
 		6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017011FAA1CB0003B1301 /* SearchResult.swift */; };
 		6C8017041FAB6021003B1301 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017031FAB6021003B1301 /* Movie.swift */; };
+		6C8017071FABA4B9003B1301 /* VideosSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017061FABA4B9003B1301 /* VideosSearchViewController.swift */; };
 		D62B85DB52DD81197FD048AF /* Pods_MoviesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B46AE8462B4FF130269B14E /* Pods_MoviesTests.framework */; };
 		FC83D82A6E13E5F81208E334 /* Pods_Movies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3527D35E5B144EB1D5CE4B5 /* Pods_Movies.framework */; };
 /* End PBXBuildFile section */
@@ -62,6 +63,7 @@
 		6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmdbApi.swift; sourceTree = "<group>"; };
 		6C8017011FAA1CB0003B1301 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		6C8017031FAB6021003B1301 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		6C8017061FABA4B9003B1301 /* VideosSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosSearchViewController.swift; sourceTree = "<group>"; };
 		9DF73E55BA267D02D9DB8465 /* Pods_MoviesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoviesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3527D35E5B144EB1D5CE4B5 /* Pods_Movies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Movies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE17625EB3D81EF1E0B49404 /* Pods-MoviesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoviesTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MoviesTests/Pods-MoviesTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 		6C23C6411FA6A5FB005ADF96 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				6C8017051FABA479003B1301 /* Screens */,
 				6C8016FE1FAA0B7E003B1301 /* Remote */,
 				6C23C6421FA6A5FB005ADF96 /* AppDelegate.swift */,
 				6C23C6441FA6A5FB005ADF96 /* ViewController.swift */,
@@ -170,6 +173,14 @@
 				6C8017031FAB6021003B1301 /* Movie.swift */,
 			);
 			path = Remote;
+			sourceTree = "<group>";
+		};
+		6C8017051FABA479003B1301 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				6C8017061FABA4B9003B1301 /* VideosSearchViewController.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		FD6F3288577EA9B9E278EA65 /* Pods */ = {
@@ -367,12 +378,14 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -486,6 +499,7 @@
 				6C23C6451FA6A5FB005ADF96 /* ViewController.swift in Sources */,
 				6C8017041FAB6021003B1301 /* Movie.swift in Sources */,
 				6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */,
+				6C8017071FABA4B9003B1301 /* VideosSearchViewController.swift in Sources */,
 				6C23C64B1FA6A5FB005ADF96 /* Movies.xcdatamodeld in Sources */,
 				6C23C6431FA6A5FB005ADF96 /* AppDelegate.swift in Sources */,
 			);

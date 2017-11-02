@@ -9,6 +9,9 @@ target 'Movies' do
 
   pod 'Moya', '~> 10.0.0'
 
+  pod 'SDWebImage'
+  
+
   target 'MoviesTests' do
     inherit! :search_paths
     # Pods for testing
