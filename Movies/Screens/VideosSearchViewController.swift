@@ -19,6 +19,7 @@ class VideosSearchViewController: UIViewController {
             activityIndicator.hidesWhenStopped = true
         }
     }
+    
     @IBOutlet weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
@@ -28,6 +29,8 @@ class VideosSearchViewController: UIViewController {
     fileprivate var searchController: UISearchController!
     fileprivate func setupSearch() {
         let s = UISearchController(searchResultsController: nil)
+        
+        // TODO: criar uma classe separada para ser o searchUpdater e setar aqui
         s.searchResultsUpdater = self
         
         s.dimsBackgroundDuringPresentation = false
@@ -145,7 +148,10 @@ extension VideosSearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "VideosSearchCell", for: indexPath) as! VideosSearchCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.videosSearchCell, for: indexPath) else {
+            fatalError("Problem dequeueing VideosSearchCell!")
+        }
+        
         let movie = movies[indexPath.row]
         cell.updateView(for: movie)
         

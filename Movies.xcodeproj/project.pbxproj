@@ -16,6 +16,7 @@
 		6C23C6501FA6A5FB005ADF96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C23C64E1FA6A5FB005ADF96 /* LaunchScreen.storyboard */; };
 		6C23C65B1FA6A5FC005ADF96 /* MoviesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23C65A1FA6A5FC005ADF96 /* MoviesTests.swift */; };
 		6C23C6661FA6A5FC005ADF96 /* MoviesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23C6651FA6A5FC005ADF96 /* MoviesUITests.swift */; };
+		6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7DB7571FABEFB80032D7AD /* R.generated.swift */; };
 		6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */; };
 		6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017011FAA1CB0003B1301 /* SearchResult.swift */; };
 		6C8017041FAB6021003B1301 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017031FAB6021003B1301 /* Movie.swift */; };
@@ -60,6 +61,7 @@
 		6C23C6611FA6A5FC005ADF96 /* MoviesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoviesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C23C6651FA6A5FC005ADF96 /* MoviesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesUITests.swift; sourceTree = "<group>"; };
 		6C23C6671FA6A5FC005ADF96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C7DB7571FABEFB80032D7AD /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmdbApi.swift; sourceTree = "<group>"; };
 		6C8017011FAA1CB0003B1301 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		6C8017031FAB6021003B1301 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 		6C23C6411FA6A5FB005ADF96 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				6C7DB7561FABEF320032D7AD /* Support */,
 				6C8017051FABA479003B1301 /* Screens */,
 				6C8016FE1FAA0B7E003B1301 /* Remote */,
 				6C23C6421FA6A5FB005ADF96 /* AppDelegate.swift */,
@@ -163,6 +166,14 @@
 				6C23C6671FA6A5FC005ADF96 /* Info.plist */,
 			);
 			path = MoviesUITests;
+			sourceTree = "<group>";
+		};
+		6C7DB7561FABEF320032D7AD /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				6C7DB7571FABEFB80032D7AD /* R.generated.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		6C8016FE1FAA0B7E003B1301 /* Remote */ = {
@@ -204,6 +215,7 @@
 			buildConfigurationList = 6C23C66A1FA6A5FC005ADF96 /* Build configuration list for PBXNativeTarget "Movies" */;
 			buildPhases = (
 				14D1B754FD60B6241C3B3400 /* [CP] Check Pods Manifest.lock */,
+				6C7DB7551FABEED80032D7AD /* Run R.swift Script */,
 				6C23C63B1FA6A5FB005ADF96 /* Sources */,
 				6C23C63C1FA6A5FB005ADF96 /* Frameworks */,
 				6C23C63D1FA6A5FB005ADF96 /* Resources */,
@@ -376,16 +388,22 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Movies/Pods-Movies-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/R.swift.Library/Rswift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/UIScrollView-InfiniteScroll/UIScrollView_InfiniteScroll.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Rswift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIScrollView_InfiniteScroll.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -421,6 +439,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MoviesUITests/Pods-MoviesUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		6C7DB7551FABEED80032D7AD /* Run R.swift Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run R.swift Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT\"";
 		};
 		819B727B6E27F0361A3A4228 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -498,6 +530,7 @@
 				6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */,
 				6C23C6451FA6A5FB005ADF96 /* ViewController.swift in Sources */,
 				6C8017041FAB6021003B1301 /* Movie.swift in Sources */,
+				6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */,
 				6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */,
 				6C8017071FABA4B9003B1301 /* VideosSearchViewController.swift in Sources */,
 				6C23C64B1FA6A5FB005ADF96 /* Movies.xcdatamodeld in Sources */,

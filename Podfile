@@ -7,10 +7,15 @@ target 'Movies' do
 
   # Pods for Movies
 
-  pod 'Moya', '~> 10.0.0'
+  pod 'Moya'
 
   pod 'SDWebImage'
-  
+
+  pod 'UIScrollView-InfiniteScroll'
+
+  pod 'AlamofireNetworkActivityIndicator'
+
+  pod 'R.swift'
 
   target 'MoviesTests' do
     inherit! :search_paths
