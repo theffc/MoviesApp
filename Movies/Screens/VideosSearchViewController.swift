@@ -12,17 +12,40 @@ import SDWebImage
 
 class VideosSearchViewController: UIViewController {
 
+//    enum Model {
+//        case loading
+//        case loaded(results: [MovieSearch])
+//        case error
+//    }
+//    var model: Model! {
+//        didSet {
+//            switch model! {
+//            case .loading:
+//                movies = []
+//                tableView.reloadData()
+//                activityIndicator.startAnimating()
+//            case let .loaded(results: results):
+//                movies = results
+//                tableView.reloadData()
+//                activityIndicator.stopAnimating()
+//            case .error:
+//                activityIndicator.stopAnimating()
+//            }
+//        }
+//    }
+    
     var movies: [MovieSearch] = []
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView! {
+    @IBOutlet fileprivate weak var activityIndicator: UIActivityIndicatorView! {
         didSet {
             activityIndicator.hidesWhenStopped = true
         }
     }
     
-    @IBOutlet weak var tableView: UITableView! {
+    @IBOutlet fileprivate weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = self
+            tableView.delegate = self
         }
     }
     
@@ -61,7 +84,7 @@ class VideosSearchViewController: UIViewController {
     fileprivate func makeSearchBarActive() {
         searchController.isActive = true
         // async because we need to call only when the searchController presentation ends (which was triggered by setting isActive to true), and, without async, we could't achieve that.
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.searchController.searchBar.becomeFirstResponder()
         }
     }
@@ -156,6 +179,31 @@ extension VideosSearchViewController: UITableViewDataSource {
         cell.updateView(for: movie)
         
         return cell
+    }
+}
+
+extension VideosSearchViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let movie = movies[indexPath.row]
+        let provider = MoyaProvider<OmdbApi>()
+        print(movie.imdbId)
+        provider.request(.movie(id: movie.imdbId)) { (result) in
+            switch result {
+            case let .failure(error):
+                print(error)
+            case let .success(value):
+                let str = String(data: value.data, encoding: .utf8)!
+                //print(str)
+                
+                do {
+                    let r = try value.map(Movie.self)
+                    //print(r)
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
 }
 

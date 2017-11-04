@@ -10,8 +10,16 @@ import Foundation
 
 struct Movie: Codable {
     
+    // MARK: Essential
+    
+    let imdbId: String
     let title: String
     let year: String
+    let poster: String
+    let type: MediaType
+    
+    // MARK: About
+    
     let rated: String
     let released: String
     let runtime: String
@@ -22,18 +30,25 @@ struct Movie: Codable {
     let plot: String
     let language: String
     let country: String
+    
+    // MARK: Critic
+    
     let awards: String
-    let poster: String
     let ratings: [MovieRating]
     let metascore: String
     let imdbRating: String
     let imdbVotes: String
-    let imdbId: String
-    let type: MediaType
-    let dvd: String
-    let boxOffice: String
-    let production: String
-    let website: String
+    
+    // MARK: Optionals
+    
+    let dvd: String?
+    let boxOffice: String?
+    let production: String?
+    let website: String?
+    let totalSeasons: String?
+    
+    // MARK: -
+    
     let response: String
     
     enum CodingKeys: String, CodingKey {
@@ -62,6 +77,7 @@ struct Movie: Codable {
         case production = "Production"
         case website = "Website"
         case response = "Response"
+        case totalSeasons
     }
 }
 
