@@ -17,6 +17,7 @@
 		6C23C65B1FA6A5FC005ADF96 /* MoviesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23C65A1FA6A5FC005ADF96 /* MoviesTests.swift */; };
 		6C23C6661FA6A5FC005ADF96 /* MoviesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23C6651FA6A5FC005ADF96 /* MoviesUITests.swift */; };
 		6C3C148B1FABFB4600274204 /* VideoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C148A1FABFB4600274204 /* VideoDetailViewController.swift */; };
+		6C3C14901FAE44E300274204 /* MovieSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C148F1FAE44E300274204 /* MovieSearchProvider.swift */; };
 		6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7DB7571FABEFB80032D7AD /* R.generated.swift */; };
 		6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */; };
 		6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017011FAA1CB0003B1301 /* SearchResult.swift */; };
@@ -63,6 +64,8 @@
 		6C23C6651FA6A5FC005ADF96 /* MoviesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesUITests.swift; sourceTree = "<group>"; };
 		6C23C6671FA6A5FC005ADF96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C3C148A1FABFB4600274204 /* VideoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailViewController.swift; sourceTree = "<group>"; };
+		6C3C148C1FAE00B000274204 /* Movies-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Movies-Bridging-Header.h"; sourceTree = "<group>"; };
+		6C3C148F1FAE44E300274204 /* MovieSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchProvider.swift; sourceTree = "<group>"; };
 		6C7DB7571FABEFB80032D7AD /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmdbApi.swift; sourceTree = "<group>"; };
 		6C8017011FAA1CB0003B1301 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -148,6 +151,7 @@
 				6C23C64E1FA6A5FB005ADF96 /* LaunchScreen.storyboard */,
 				6C23C6511FA6A5FB005ADF96 /* Info.plist */,
 				6C23C6491FA6A5FB005ADF96 /* Movies.xcdatamodeld */,
+				6C3C148C1FAE00B000274204 /* Movies-Bridging-Header.h */,
 			);
 			path = Movies;
 			sourceTree = "<group>";
@@ -184,6 +188,7 @@
 				6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */,
 				6C8017011FAA1CB0003B1301 /* SearchResult.swift */,
 				6C8017031FAB6021003B1301 /* Movie.swift */,
+				6C3C148F1FAE44E300274204 /* MovieSearchProvider.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -288,6 +293,7 @@
 				TargetAttributes = {
 					6C23C63E1FA6A5FB005ADF96 = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					6C23C6551FA6A5FC005ADF96 = {
@@ -531,6 +537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */,
+				6C3C14901FAE44E300274204 /* MovieSearchProvider.swift in Sources */,
 				6C23C6451FA6A5FB005ADF96 /* ViewController.swift in Sources */,
 				6C8017041FAB6021003B1301 /* Movie.swift in Sources */,
 				6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */,
@@ -705,12 +712,15 @@
 			baseConfigurationReference = D3DD6C0FC2EA7E78A356D0C7 /* Pods-Movies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NNE38JQP9A;
 				INFOPLIST_FILE = Movies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theffc.Movies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Movies/Movies-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -721,12 +731,14 @@
 			baseConfigurationReference = 5785166D6D534AB6E86308AB /* Pods-Movies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = NNE38JQP9A;
 				INFOPLIST_FILE = Movies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theffc.Movies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Movies/Movies-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

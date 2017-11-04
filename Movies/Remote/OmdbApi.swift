@@ -25,7 +25,7 @@ extension OmdbApi: TargetType {
         return ""
     }
     
-    var method: Method {
+    var method: Moya.Method {
         return .get
     }
     

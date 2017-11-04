@@ -10,7 +10,7 @@ import UIKit
 import Moya
 import SDWebImage
 
-class VideosSearchViewController: UIViewController {
+class VideosSearchViewController: UIViewController, UISearchResultsUpdating {
 
 //    enum Model {
 //        case loading
@@ -33,6 +33,7 @@ class VideosSearchViewController: UIViewController {
 //            }
 //        }
 //    }
+    var provider: MovieSearchProviderType = MovieSearchRemoteProvider()
     
     var movies: [MovieSearch] = []
     
@@ -71,8 +72,28 @@ class VideosSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupSearch()
+        setupInfiniteScroll()
+    }
+    
+    fileprivate func setupInfiniteScroll() {
+        tableView.setShouldShowInfiniteScrollHandler() { _ in
+            let hasSearched = self.lastCompletedQuery != nil
+            let hasMoreContent = self.movies.count % self.pageSize == 0
+            
+            return hasSearched && hasMoreContent
+        }
+        
+        tableView.addInfiniteScroll(handler: { (table) in
+            guard let query = self.lastCompletedQuery else {
+                table.finishInfiniteScroll()
+                return
+            }
+            
+            self.pageToSearch = self.pageToSearch + 1
+            self.searchForMovies(query)
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,10 +110,16 @@ class VideosSearchViewController: UIViewController {
         }
     }
     
+    // MARK: Search
+    
     fileprivate var lastScheduledQuery: String = ""
-}
-
-extension VideosSearchViewController: UISearchResultsUpdating {
+    fileprivate var lastCompletedQuery: String?
+    
+    fileprivate var pageSize: Int {
+        return provider.fixedPageSize ?? 10
+    }
+    
+    fileprivate lazy var pageToSearch = provider.initialPage
     
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
@@ -102,7 +129,7 @@ extension VideosSearchViewController: UISearchResultsUpdating {
         
         activityIndicator.stopAnimating()
         
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(searchForMovies(_:)), object: lastScheduledQuery)
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(newSearch(_:)), object: lastScheduledQuery)
         
         guard !query.isEmpty else {
             return
@@ -112,46 +139,57 @@ extension VideosSearchViewController: UISearchResultsUpdating {
     }
     
     fileprivate func scheduleNewSearch(query: String) {
-        perform(#selector(searchForMovies(_:)), with: query, afterDelay: 0.8)
+        perform(#selector(newSearch(_:)), with: query, afterDelay: 1)
         lastScheduledQuery = query
     }
     
-    @objc func searchForMovies(_ query: String) {
+    @objc func newSearch(_ query: String) {
+        guard isCurrentQuery(query) else {
+            return
+        }
+        
         movies = []
         tableView.reloadData()
         
+        pageToSearch = provider.initialPage
+        
         activityIndicator.startAnimating()
         
-        let provider = MoyaProvider<OmdbApi>()
-        provider.request(.searchMovie(title: query, page: 1)) {
-            [weak self] result in
+        searchForMovies(query)
+    }
+    
+    @objc func searchForMovies(_ query: String) {
+        
+        provider.searchForMovie(query: query, page: pageToSearch) {
+            [weak self] (result) in
             
-            guard let this = self else {
+            guard let weak = self else {
                 return
             }
             
-            guard this.isCurrentQuery(query) else {
+            guard weak.isCurrentQuery(query) else {
                 return
             }
             
-            this.activityIndicator.stopAnimating()
+            weak.lastCompletedQuery = query
+            
+            weak.activityIndicator.stopAnimating()
+            weak.tableView.finishInfiniteScroll()
             
             switch result {
             case let .failure(error):
                 print(error)
                 return
-            case let .success(value):
-                do {
-                    let search = try value.map(SearchResult.self)
-                    this.movies = search.movies
-                }
-                catch {
-                    print(error)
-                    return
+                
+            case let .success(movies):
+                if weak.pageToSearch == weak.provider.initialPage {
+                    weak.movies = movies
+                } else {
+                    weak.movies.append(contentsOf: movies)
                 }
             }
             
-            this.tableView.reloadData()
+            weak.tableView.reloadData()
         }
     }
     

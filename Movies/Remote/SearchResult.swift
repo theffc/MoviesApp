@@ -42,6 +42,7 @@ enum MediaType: String, Codable {
     case series
     case movie
     case episode
+    case game
 }
 
 
