@@ -10,29 +10,8 @@ import UIKit
 import Moya
 import SDWebImage
 
-class VideosSearchViewController: UIViewController, UISearchResultsUpdating {
+class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
 
-//    enum Model {
-//        case loading
-//        case loaded(results: [MovieSearch])
-//        case error
-//    }
-//    var model: Model! {
-//        didSet {
-//            switch model! {
-//            case .loading:
-//                movies = []
-//                tableView.reloadData()
-//                activityIndicator.startAnimating()
-//            case let .loaded(results: results):
-//                movies = results
-//                tableView.reloadData()
-//                activityIndicator.stopAnimating()
-//            case .error:
-//                activityIndicator.stopAnimating()
-//            }
-//        }
-//    }
     var provider: MovieSearchProviderType = MovieSearchRemoteProvider()
     
     var movies: [MovieSearch] = []
@@ -51,16 +30,17 @@ class VideosSearchViewController: UIViewController, UISearchResultsUpdating {
     }
     
     fileprivate var searchController: UISearchController!
+    fileprivate var searchManager: VideoSearchManager!
     fileprivate func setupSearch() {
         let s = UISearchController(searchResultsController: nil)
         
-        // TODO: criar uma classe separada para ser o searchUpdater e setar aqui
-        s.searchResultsUpdater = self
+        searchManager = VideoSearchManager(delegate: self, searchController: s, tableViewToAddInfiniteScroll: tableView)
+        s.searchResultsUpdater = searchManager
         
         s.dimsBackgroundDuringPresentation = false
-        self.definesPresentationContext = true
+        definesPresentationContext = true
         
-        self.tableView.tableHeaderView = s.searchBar
+        tableView.tableHeaderView = s.searchBar
         
         s.searchBar.placeholder = "Pesquisar por filmes"
         s.searchBar.autocorrectionType = .no
@@ -74,26 +54,6 @@ class VideosSearchViewController: UIViewController, UISearchResultsUpdating {
         super.viewDidLoad()
         
         setupSearch()
-        setupInfiniteScroll()
-    }
-    
-    fileprivate func setupInfiniteScroll() {
-        tableView.setShouldShowInfiniteScrollHandler() { _ in
-            let hasSearched = self.lastCompletedQuery != nil
-            let hasMoreContent = self.movies.count % self.pageSize == 0
-            
-            return hasSearched && hasMoreContent
-        }
-        
-        tableView.addInfiniteScroll(handler: { (table) in
-            guard let query = self.lastCompletedQuery else {
-                table.finishInfiniteScroll()
-                return
-            }
-            
-            self.pageToSearch = self.pageToSearch + 1
-            self.searchForMovies(query)
-        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,91 +70,29 @@ class VideosSearchViewController: UIViewController, UISearchResultsUpdating {
         }
     }
     
-    // MARK: Search
-    
-    fileprivate var lastScheduledQuery: String = ""
-    fileprivate var lastCompletedQuery: String?
-    
-    fileprivate var pageSize: Int {
-        return provider.fixedPageSize ?? 10
-    }
-    
-    fileprivate lazy var pageToSearch = provider.initialPage
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        let query = searchController.searchBar.text ?? ""
-        guard query != lastScheduledQuery else {
-            return
-        }
+    func videoSearchManager(_ manager: VideoSearchManager, didChangeState state: Loadable<VideoSearchResult, Error>) {
+        switch state {
+        case .loading:
+            movies = []
+            tableView.reloadData()
+            activityIndicator.startAnimating()
         
-        activityIndicator.stopAnimating()
-        
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(newSearch(_:)), object: lastScheduledQuery)
-        
-        guard !query.isEmpty else {
-            return
-        }
-        
-        scheduleNewSearch(query: query)
-    }
-    
-    fileprivate func scheduleNewSearch(query: String) {
-        perform(#selector(newSearch(_:)), with: query, afterDelay: 1)
-        lastScheduledQuery = query
-    }
-    
-    @objc func newSearch(_ query: String) {
-        guard isCurrentQuery(query) else {
-            return
-        }
-        
-        movies = []
-        tableView.reloadData()
-        
-        pageToSearch = provider.initialPage
-        
-        activityIndicator.startAnimating()
-        
-        searchForMovies(query)
-    }
-    
-    @objc func searchForMovies(_ query: String) {
-        
-        provider.searchForMovie(query: query, page: pageToSearch) {
-            [weak self] (result) in
+        case let .loaded(result):
+            activityIndicator.stopAnimating()
             
-            guard let weak = self else {
-                return
+            if result.shouldAppendNewResultsWithPrevious {
+                movies.append(contentsOf: result.movies)
+                tableView.finishInfiniteScroll()
+            } else {
+                movies = result.movies
             }
             
-            guard weak.isCurrentQuery(query) else {
-                return
-            }
+            tableView.reloadData()
             
-            weak.lastCompletedQuery = query
-            
-            weak.activityIndicator.stopAnimating()
-            weak.tableView.finishInfiniteScroll()
-            
-            switch result {
-            case let .failure(error):
-                print(error)
-                return
-                
-            case let .success(movies):
-                if weak.pageToSearch == weak.provider.initialPage {
-                    weak.movies = movies
-                } else {
-                    weak.movies.append(contentsOf: movies)
-                }
-            }
-            
-            weak.tableView.reloadData()
+        case .error(_):
+            activityIndicator.stopAnimating()
+            tableView.finishInfiniteScroll()
         }
-    }
-    
-    fileprivate func isCurrentQuery(_ query: String) -> Bool {
-        return query == searchController.searchBar.text
     }
 }
 

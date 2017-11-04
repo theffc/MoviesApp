@@ -18,6 +18,8 @@
 		6C23C6661FA6A5FC005ADF96 /* MoviesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C23C6651FA6A5FC005ADF96 /* MoviesUITests.swift */; };
 		6C3C148B1FABFB4600274204 /* VideoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C148A1FABFB4600274204 /* VideoDetailViewController.swift */; };
 		6C3C14901FAE44E300274204 /* MovieSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C148F1FAE44E300274204 /* MovieSearchProvider.swift */; };
+		6C3C14921FAE62F900274204 /* VideoSearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C14911FAE62F900274204 /* VideoSearchManager.swift */; };
+		6C3C14951FAE636500274204 /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3C14941FAE636500274204 /* Loadable.swift */; };
 		6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C7DB7571FABEFB80032D7AD /* R.generated.swift */; };
 		6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */; };
 		6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8017011FAA1CB0003B1301 /* SearchResult.swift */; };
@@ -66,6 +68,8 @@
 		6C3C148A1FABFB4600274204 /* VideoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailViewController.swift; sourceTree = "<group>"; };
 		6C3C148C1FAE00B000274204 /* Movies-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Movies-Bridging-Header.h"; sourceTree = "<group>"; };
 		6C3C148F1FAE44E300274204 /* MovieSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchProvider.swift; sourceTree = "<group>"; };
+		6C3C14911FAE62F900274204 /* VideoSearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchManager.swift; sourceTree = "<group>"; };
+		6C3C14941FAE636500274204 /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
 		6C7DB7571FABEFB80032D7AD /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		6C8016FF1FAA0BF6003B1301 /* OmdbApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmdbApi.swift; sourceTree = "<group>"; };
 		6C8017011FAA1CB0003B1301 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 		6C23C6411FA6A5FB005ADF96 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				6C3C14931FAE634500274204 /* Common */,
 				6C7DB7561FABEF320032D7AD /* Support */,
 				6C8017051FABA479003B1301 /* Screens */,
 				6C8016FE1FAA0B7E003B1301 /* Remote */,
@@ -174,6 +179,14 @@
 			path = MoviesUITests;
 			sourceTree = "<group>";
 		};
+		6C3C14931FAE634500274204 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6C3C14941FAE636500274204 /* Loadable.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		6C7DB7561FABEF320032D7AD /* Support */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +211,7 @@
 			children = (
 				6C8017061FABA4B9003B1301 /* VideosSearchViewController.swift */,
 				6C3C148A1FABFB4600274204 /* VideoDetailViewController.swift */,
+				6C3C14911FAE62F900274204 /* VideoSearchManager.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -537,9 +551,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C8017001FAA0BF6003B1301 /* OmdbApi.swift in Sources */,
+				6C3C14921FAE62F900274204 /* VideoSearchManager.swift in Sources */,
 				6C3C14901FAE44E300274204 /* MovieSearchProvider.swift in Sources */,
 				6C23C6451FA6A5FB005ADF96 /* ViewController.swift in Sources */,
 				6C8017041FAB6021003B1301 /* Movie.swift in Sources */,
+				6C3C14951FAE636500274204 /* Loadable.swift in Sources */,
 				6C7DB7581FABEFB90032D7AD /* R.generated.swift in Sources */,
 				6C3C148B1FABFB4600274204 /* VideoDetailViewController.swift in Sources */,
 				6C8017021FAA1CB0003B1301 /* SearchResult.swift in Sources */,
