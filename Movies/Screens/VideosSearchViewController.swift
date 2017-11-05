@@ -34,7 +34,7 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
     fileprivate func setupSearch() {
         let s = UISearchController(searchResultsController: nil)
         
-        searchManager = VideoSearchManager(delegate: self, searchController: s, tableViewToAddInfiniteScroll: tableView)
+        searchManager = VideoSearchManager(searchController: s, delegate: self)
         s.searchResultsUpdater = searchManager
         
         s.dimsBackgroundDuringPresentation = false
@@ -54,6 +54,29 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
         super.viewDidLoad()
         
         setupSearch()
+        setupInfiniteScroll(in: tableView)
+    }
+    
+    fileprivate func setupInfiniteScroll(in tableView: UITableView) {
+        tableView.setShouldShowInfiniteScrollHandler() {
+            [weak self] _ in
+            guard let weak = self else {
+                return false
+            }
+            
+            return weak.searchManager.currentSearch.hasMoreContent
+        }
+        
+        tableView.addInfiniteScroll(handler: {
+            [weak self] (table) in
+            guard let weak = self else {
+                return
+            }
+            
+            weak.searchManager.triggerSearchForNextPage()
+        })
+        
+        tableView.infiniteScrollIndicatorMargin = 20
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -70,21 +93,25 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
         }
     }
     
-    func videoSearchManager(_ manager: VideoSearchManager, didChangeState state: Loadable<VideoSearchResult, Error>) {
-        switch state {
+    func videoSearchManager(_ manager: VideoSearchManager, didChangeSearchState search: VideoSearchManager.Search) {
+        switch search.resultState {
         case .loading:
+            guard search.page == manager.initialPage else {
+                return
+            }
+            
             movies = []
             tableView.reloadData()
             activityIndicator.startAnimating()
         
-        case let .loaded(result):
+        case let .loaded(movies):
             activityIndicator.stopAnimating()
             
-            if result.shouldAppendNewResultsWithPrevious {
-                movies.append(contentsOf: result.movies)
-                tableView.finishInfiniteScroll()
+            if search.page == manager.initialPage {
+                self.movies = movies
             } else {
-                movies = result.movies
+                self.movies.append(contentsOf: movies)
+                tableView.finishInfiniteScroll()
             }
             
             tableView.reloadData()

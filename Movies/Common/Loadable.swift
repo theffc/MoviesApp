@@ -6,9 +6,9 @@
 //  Copyright © 2017 Frederico Franco. All rights reserved.
 //
 
-enum Loadable<Value, Error> {
+enum Loadable<Value, E: Error> {
     
     case loading
     case loaded(Value)
-    case error(Error)
+    case error(E)
 }

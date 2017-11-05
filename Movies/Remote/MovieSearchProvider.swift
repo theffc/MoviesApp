@@ -10,8 +10,6 @@ import Moya
 import Result
 
 struct MovieSearchProviderResult {
-    let query: String
-    let page: Int
     let movies: [MovieSearch]
     let hasMoreContent: Bool
 }
@@ -24,8 +22,6 @@ protocol MovieSearchProviderType {
     
     var pageSize: Int { get }
     
-    var fixedPageSize: Int? { get }
-    
     var initialPage: Int { get }
 }
 
@@ -36,8 +32,6 @@ class MovieSearchRemoteProvider: MovieSearchProviderType {
     let pageSize = 10
     
     let initialPage = 1
-    
-    var fixedPageSize: Int? = 10
     
     fileprivate let provider = MoyaProvider<OmdbApi>()
     
@@ -62,7 +56,7 @@ class MovieSearchRemoteProvider: MovieSearchProviderType {
     
     fileprivate func makeSuccessModel(query: String, result: SearchResult, page: Int) -> MovieSearchProviderResult {
         let has = self.hasMoreContent(currentPage: page, currentPageSize: result.movies.count, totalResults: Int(result.totalResults))
-        return MovieSearchProviderResult(query: query, page: page, movies: result.movies, hasMoreContent: has)
+        return MovieSearchProviderResult(movies: result.movies, hasMoreContent: has)
     }
     
     fileprivate func hasMoreContent(currentPage: Int, currentPageSize: Int, totalResults: Int?) -> Bool {
