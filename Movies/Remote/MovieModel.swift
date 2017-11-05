@@ -31,7 +31,7 @@ struct MovieModel: Codable {
     let language: String
     let country: String
     
-    // MARK: Critic
+    // MARK: Critics
     
     let awards: String
     let ratings: [MovieRating]

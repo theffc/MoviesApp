@@ -41,8 +41,10 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.reuseIdentifier` struct is generated, and contains static references to 1 reuse identifiers.
+  /// This `R.reuseIdentifier` struct is generated, and contains static references to 2 reuse identifiers.
   struct reuseIdentifier {
+    /// Reuse identifier `MovieDetailFieldCell`.
+    static let movieDetailFieldCell: Rswift.ReuseIdentifier<MovieDetailFieldCell> = Rswift.ReuseIdentifier(identifier: "MovieDetailFieldCell")
     /// Reuse identifier `MovieSearchCell`.
     static let movieSearchCell: Rswift.ReuseIdentifier<MovieSearchCell> = Rswift.ReuseIdentifier(identifier: "MovieSearchCell")
     
@@ -81,7 +83,7 @@ struct R: Rswift.Validatable {
   
   fileprivate struct intern: Rswift.Validatable {
     fileprivate static func validate() throws {
-      // There are no resources to validate
+      try _R.validate()
     }
     
     fileprivate init() {}
@@ -92,12 +94,20 @@ struct R: Rswift.Validatable {
   fileprivate init() {}
 }
 
-struct _R {
+struct _R: Rswift.Validatable {
+  static func validate() throws {
+    try storyboard.validate()
+  }
+  
   struct nib {
     fileprivate init() {}
   }
   
-  struct storyboard {
+  struct storyboard: Rswift.Validatable {
+    static func validate() throws {
+      try main.validate()
+    }
+    
     struct launchScreen: Rswift.StoryboardResourceWithInitialControllerType {
       typealias InitialController = UIKit.UIViewController
       
@@ -107,11 +117,20 @@ struct _R {
       fileprivate init() {}
     }
     
-    struct main: Rswift.StoryboardResourceWithInitialControllerType {
+    struct main: Rswift.StoryboardResourceWithInitialControllerType, Rswift.Validatable {
       typealias InitialController = MovieSearchViewController
       
       let bundle = R.hostingBundle
+      let movieDetailViewController = StoryboardViewControllerResource<MovieDetailViewController>(identifier: "MovieDetailViewController")
       let name = "Main"
+      
+      func movieDetailViewController(_: Void = ()) -> MovieDetailViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: movieDetailViewController)
+      }
+      
+      static func validate() throws {
+        if _R.storyboard.main().movieDetailViewController() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'movieDetailViewController' could not be loaded from storyboard 'Main' as 'MovieDetailViewController'.") }
+      }
       
       fileprivate init() {}
     }
