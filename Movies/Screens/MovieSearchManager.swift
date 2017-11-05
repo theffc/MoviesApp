@@ -1,5 +1,5 @@
 //
-//  VideoSearchManager.swift
+//  MovieSearchManager.swift
 //  Movies
 //
 //  Created by Frederico Franco on 04/11/17.
@@ -10,20 +10,20 @@ import Foundation
 import Result
 
 
-protocol VideoSearchManagerDelegate: class {
+protocol MovieSearchManagerDelegate: class {
     
-    func videoSearchManager(_ manager: VideoSearchManager, didChangeSearchState search: VideoSearchManager.Search)
+    func movieSearchManager(_ manager: MovieSearchManager, didChangeSearchState search: MovieSearchManager.Search)
 }
 
-class VideoSearchManager: NSObject, UISearchResultsUpdating {
+class MovieSearchManager: NSObject, UISearchResultsUpdating {
     
     var provider: MovieSearchProviderType
     
-    weak var delegate: VideoSearchManagerDelegate?
+    weak var delegate: MovieSearchManagerDelegate?
     
     fileprivate let searchController: UISearchController!
     
-    init(searchController: UISearchController, delegate: VideoSearchManagerDelegate, provider: MovieSearchProviderType = MovieSearchRemoteProvider()) {
+    init(searchController: UISearchController, delegate: MovieSearchManagerDelegate, provider: MovieSearchProviderType = MovieSearchRemoteProvider()) {
         self.delegate = delegate
         self.searchController = searchController
         self.provider = provider
@@ -37,10 +37,10 @@ class VideoSearchManager: NSObject, UISearchResultsUpdating {
     class Search {
         let query: String
         var page: Int
-        var resultState: Loadable<[MovieSearch], AnyError>
+        var resultState: Loadable<[MovieSearchModel], AnyError>
         var hasMoreContent: Bool
         
-        init(query: String, page: Int, resultState: Loadable<[MovieSearch], AnyError> = .loading, hasMoreContent: Bool = false) {
+        init(query: String, page: Int, resultState: Loadable<[MovieSearchModel], AnyError> = .loading, hasMoreContent: Bool = false) {
             self.query = query
             self.page = page
             self.resultState = resultState
@@ -74,7 +74,7 @@ class VideoSearchManager: NSObject, UISearchResultsUpdating {
         
         if query.isEmpty {
             currentSearch = Search(query: "", page: initialPage, resultState: .loaded([]), hasMoreContent: false)
-            delegate?.videoSearchManager(self, didChangeSearchState: currentSearch)
+            delegate?.movieSearchManager(self, didChangeSearchState: currentSearch)
         } else {
             scheduleNewSearch(query: query)
         }
@@ -110,7 +110,7 @@ class VideoSearchManager: NSObject, UISearchResultsUpdating {
     
     @objc func searchForMovies() {
         currentSearch.resultState = .loading
-        delegate?.videoSearchManager(self, didChangeSearchState: currentSearch)
+        delegate?.movieSearchManager(self, didChangeSearchState: currentSearch)
         
         provider.searchForMovie(query: currentSearch.query, page: currentSearch.page) {
             [weak self] (result) in
@@ -127,12 +127,12 @@ class VideoSearchManager: NSObject, UISearchResultsUpdating {
             case let .failure(error):
                 weak.currentSearch.resultState = .error(error)
                 weak.currentSearch.hasMoreContent = weak.currentSearch.page != weak.initialPage
-                weak.delegate?.videoSearchManager(weak, didChangeSearchState: weak.currentSearch)
+                weak.delegate?.movieSearchManager(weak, didChangeSearchState: weak.currentSearch)
                 
             case let .success(success):
                 weak.currentSearch.resultState = .loaded(success.movies)
                 weak.currentSearch.hasMoreContent = success.hasMoreContent
-                weak.delegate?.videoSearchManager(weak, didChangeSearchState: weak.currentSearch)
+                weak.delegate?.movieSearchManager(weak, didChangeSearchState: weak.currentSearch)
             }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  VideoDetailViewController.swift
+//  MovieDetailViewController.swift
 //  Movies
 //
 //  Created by Frederico Franco on 02/11/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VideoDetailViewController: UIViewController {
+class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

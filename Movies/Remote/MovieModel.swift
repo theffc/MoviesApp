@@ -1,5 +1,5 @@
 //
-//  Movie.swift
+//  MovieModel.swift
 //  Movies
 //
 //  Created by Frederico Franco on 02/11/17.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Movie: Codable {
+struct MovieModel: Codable {
     
     // MARK: Essential
     

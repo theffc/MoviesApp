@@ -9,7 +9,7 @@
 
 struct SearchResult: Codable {
     
-    let movies: [MovieSearch]
+    let movies: [MovieSearchModel]
     let totalResults: String
     let response: String
     
@@ -20,7 +20,7 @@ struct SearchResult: Codable {
     }
 }
 
-struct MovieSearch: Codable {
+struct MovieSearchModel: Codable {
     
     let title: String
     let year: String

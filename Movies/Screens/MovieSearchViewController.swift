@@ -1,5 +1,5 @@
 //
-//  VideosSearchViewController.swift
+//  MovieSearchViewController.swift
 //  Movies
 //
 //  Created by Frederico Franco on 02/11/17.
@@ -10,11 +10,11 @@ import UIKit
 import Moya
 import SDWebImage
 
-class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
+class MovieSearchViewController: UIViewController, MovieSearchManagerDelegate {
 
     var provider: MovieSearchProviderType = MovieSearchRemoteProvider()
     
-    var movies: [MovieSearch] = []
+    var movies: [MovieSearchModel] = []
     
     @IBOutlet fileprivate weak var activityIndicator: UIActivityIndicatorView! {
         didSet {
@@ -30,11 +30,11 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
     }
     
     fileprivate var searchController: UISearchController!
-    fileprivate var searchManager: VideoSearchManager!
+    fileprivate var searchManager: MovieSearchManager!
     fileprivate func setupSearch() {
         let s = UISearchController(searchResultsController: nil)
         
-        searchManager = VideoSearchManager(searchController: s, delegate: self)
+        searchManager = MovieSearchManager(searchController: s, delegate: self)
         s.searchResultsUpdater = searchManager
         
         s.dimsBackgroundDuringPresentation = false
@@ -93,7 +93,7 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
         }
     }
     
-    func videoSearchManager(_ manager: VideoSearchManager, didChangeSearchState search: VideoSearchManager.Search) {
+    func movieSearchManager(_ manager: MovieSearchManager, didChangeSearchState search: MovieSearchManager.Search) {
         switch search.resultState {
         case .loading:
             guard search.page == manager.initialPage else {
@@ -123,7 +123,7 @@ class VideosSearchViewController: UIViewController, VideoSearchManagerDelegate {
     }
 }
 
-extension VideosSearchViewController: UITableViewDataSource {
+extension MovieSearchViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -134,7 +134,7 @@ extension VideosSearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.videosSearchCell, for: indexPath) else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.movieSearchCell, for: indexPath) else {
             fatalError("Problem dequeueing VideosSearchCell!")
         }
         
@@ -145,7 +145,7 @@ extension VideosSearchViewController: UITableViewDataSource {
     }
 }
 
-extension VideosSearchViewController: UITableViewDelegate {
+extension MovieSearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
@@ -160,7 +160,7 @@ extension VideosSearchViewController: UITableViewDelegate {
                 //print(str)
                 
                 do {
-                    let r = try value.map(Movie.self)
+                    let r = try value.map(MovieModel.self)
                     //print(r)
                 } catch {
                     print(error)
@@ -171,14 +171,14 @@ extension VideosSearchViewController: UITableViewDelegate {
 }
 
 
-class VideosSearchCell: UITableViewCell {
+class MovieSearchCell: UITableViewCell {
     
     @IBOutlet weak var posterView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var mediaLabel: UILabel!
     
-    func updateView(for movie: MovieSearch) {
+    func updateView(for movie: MovieSearchModel) {
         posterView.sd_setImage(with: URL(string: movie.poster), completed: nil)
         titleLabel.text = movie.title
         yearLabel.text = movie.year

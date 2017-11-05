@@ -43,8 +43,8 @@ struct R: Rswift.Validatable {
   
   /// This `R.reuseIdentifier` struct is generated, and contains static references to 1 reuse identifiers.
   struct reuseIdentifier {
-    /// Reuse identifier `VideosSearchCell`.
-    static let videosSearchCell: Rswift.ReuseIdentifier<VideosSearchCell> = Rswift.ReuseIdentifier(identifier: "VideosSearchCell")
+    /// Reuse identifier `MovieSearchCell`.
+    static let movieSearchCell: Rswift.ReuseIdentifier<MovieSearchCell> = Rswift.ReuseIdentifier(identifier: "MovieSearchCell")
     
     fileprivate init() {}
   }
@@ -108,7 +108,7 @@ struct _R {
     }
     
     struct main: Rswift.StoryboardResourceWithInitialControllerType {
-      typealias InitialController = VideosSearchViewController
+      typealias InitialController = MovieSearchViewController
       
       let bundle = R.hostingBundle
       let name = "Main"

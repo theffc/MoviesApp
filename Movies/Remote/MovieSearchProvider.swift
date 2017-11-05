@@ -10,7 +10,7 @@ import Moya
 import Result
 
 struct MovieSearchProviderResult {
-    let movies: [MovieSearch]
+    let movies: [MovieSearchModel]
     let hasMoreContent: Bool
 }
 
