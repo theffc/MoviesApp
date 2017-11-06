@@ -38,14 +38,6 @@ struct MovieSearchModel: Codable {
 }
 
 
-enum MediaType: String, Codable {
-    case series
-    case movie
-    case episode
-    case game
-}
-
-
 /**
  Auxiliary type to work with integers that were represented with strings.
  See https://bugs.swift.org/browse/SR-5249 for further explanation.

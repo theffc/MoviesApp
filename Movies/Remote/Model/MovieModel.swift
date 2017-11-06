@@ -81,6 +81,13 @@ struct MovieModel: Codable {
     }
 }
 
+enum MediaType: String, Codable {
+    case series
+    case movie
+    case episode
+    case game
+}
+
 struct MovieRating: Codable {
 
     let source: String
