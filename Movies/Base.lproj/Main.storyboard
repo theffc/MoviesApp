@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -259,6 +260,34 @@
                                                     </tableViewCell>
                                                 </prototypes>
                                             </tableView>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="eRs-NE-VNf">
+                                                <rect key="frame" x="169" y="250" width="37" height="37"/>
+                                                <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            </activityIndicatorView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DrD-ba-9ER" userLabel="ErrorView">
+                                                <rect key="frame" x="69" y="230" width="237.5" height="55"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Não foi possível carregar o conteúdo" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRv-rw-arK">
+                                                        <rect key="frame" x="0.0" y="0.0" width="237.5" height="17"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ikg-5n-sZW">
+                                                        <rect key="frame" x="0.0" y="25" width="237.5" height="30"/>
+                                                        <state key="normal" title="Tentar novamente"/>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="ikg-5n-sZW" secondAttribute="trailing" id="2Z4-8I-PdY"/>
+                                                    <constraint firstAttribute="trailing" secondItem="JRv-rw-arK" secondAttribute="trailing" id="Bqb-Ml-EE0"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ikg-5n-sZW" secondAttribute="bottom" id="ca5-vq-1W8"/>
+                                                    <constraint firstItem="ikg-5n-sZW" firstAttribute="top" secondItem="JRv-rw-arK" secondAttribute="bottom" constant="8" id="rnD-Ah-D8T"/>
+                                                    <constraint firstItem="JRv-rw-arK" firstAttribute="leading" secondItem="DrD-ba-9ER" secondAttribute="leading" id="t5x-BV-esu"/>
+                                                    <constraint firstItem="JRv-rw-arK" firstAttribute="top" secondItem="DrD-ba-9ER" secondAttribute="top" id="ujw-FS-3sc"/>
+                                                    <constraint firstItem="ikg-5n-sZW" firstAttribute="leading" secondItem="DrD-ba-9ER" secondAttribute="leading" id="ze5-Eb-5d3"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="NPb-nd-ct6" firstAttribute="top" secondItem="mID-En-PT9" secondAttribute="bottom" constant="10" id="51g-9z-hcg"/>
@@ -266,8 +295,15 @@
                                             <constraint firstAttribute="trailing" secondItem="mID-En-PT9" secondAttribute="trailing" constant="15" id="9bA-rM-mj9"/>
                                             <constraint firstItem="NPb-nd-ct6" firstAttribute="leading" secondItem="hlW-Z0-K5z" secondAttribute="leading" id="BAz-BW-M1h"/>
                                             <constraint firstItem="mID-En-PT9" firstAttribute="top" secondItem="hlW-Z0-K5z" secondAttribute="top" constant="10" id="Bmb-kz-P9h"/>
+                                            <constraint firstItem="DrD-ba-9ER" firstAttribute="centerX" secondItem="hlW-Z0-K5z" secondAttribute="centerX" id="Rnq-1e-3j1"/>
+                                            <constraint firstItem="eRs-NE-VNf" firstAttribute="centerX" secondItem="hlW-Z0-K5z" secondAttribute="centerX" id="bZQ-r2-6rb"/>
+                                            <constraint firstItem="eRs-NE-VNf" firstAttribute="top" secondItem="mID-En-PT9" secondAttribute="bottom" constant="40" id="d4N-4I-uKi"/>
                                             <constraint firstAttribute="bottom" secondItem="NPb-nd-ct6" secondAttribute="bottom" id="gqB-QH-8lV"/>
+                                            <constraint firstItem="DrD-ba-9ER" firstAttribute="top" secondItem="mID-En-PT9" secondAttribute="bottom" constant="20" id="lgH-qp-IMg"/>
                                             <constraint firstItem="mID-En-PT9" firstAttribute="leading" secondItem="hlW-Z0-K5z" secondAttribute="leading" constant="15" id="mYn-QX-5EM"/>
+                                            <constraint firstItem="DrD-ba-9ER" firstAttribute="width" relation="lessThanOrEqual" secondItem="hlW-Z0-K5z" secondAttribute="width" multiplier="0.75" id="sOn-0L-8va"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="eRs-NE-VNf" secondAttribute="bottom" constant="20" id="wKJ-lY-9iP"/>
+                                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="DrD-ba-9ER" secondAttribute="bottom" constant="20" id="xjC-Iw-uuB"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -290,6 +326,8 @@
                         <viewLayoutGuide key="safeArea" id="572-mB-ZSb"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="eRs-NE-VNf" id="p9W-WX-857"/>
+                        <outlet property="errorView" destination="DrD-ba-9ER" id="2Iw-k2-9lf"/>
                         <outlet property="headerView" destination="mID-En-PT9" id="64b-3w-9r0"/>
                         <outlet property="tableView" destination="NPb-nd-ct6" id="Qy5-2p-OiC"/>
                         <outlet property="tableViewHeightConstraint" destination="aUp-Ho-KHJ" id="ChX-M9-PrR"/>
@@ -297,7 +335,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wXa-4N-pe8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1271.2" y="-108.39580209895054"/>
+            <point key="canvasLocation" x="1284" y="51.724137931034484"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0g4-s7-01z">

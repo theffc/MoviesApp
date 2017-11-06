@@ -36,7 +36,11 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet private weak var headerView: MovieDetailHeaderView!
     
     private let keyPathTableViewContentSize = #keyPath(UITableView.contentSize)
-    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint! {
+        didSet {
+            tableViewHeightConstraint.constant = 0
+        }
+    }
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = tableViewManager
@@ -46,6 +50,8 @@ class MovieDetailViewController: UIViewController {
     }
     private var tableViewManager = MovieDetailTableViewManager()
     
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var errorView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +64,20 @@ class MovieDetailViewController: UIViewController {
         case let .completeMovie(movie):
             headerView.updateView(for: movie)
             
+            tableView.isHidden = false
+            activityIndicator.stopAnimating()
+            errorView.isHidden = true
+            
             let sections = MovieDetailTableSection.parseMovieModel(movie)
             tableViewManager.sections = sections
             tableView.reloadData()
             
         case let .movieSearch(search):
             headerView.updateView(for: search)
+            
+            activityIndicator.startAnimating()
+            tableView.isHidden = true
+            errorView.isHidden = true
         }
     }
     
