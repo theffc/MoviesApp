@@ -66,18 +66,22 @@ class MovieSearchManager: NSObject, UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        guard query != lastScheduledQuery else {
+        
+        if query != lastScheduledQuery {
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(newSearch(_:)), object: lastScheduledQuery)
+        }
+        
+        guard !query.isEmpty else {
+            currentSearch = Search(query: "", page: initialPage, resultState: .loaded([]), hasMoreContent: false)
+            delegate?.movieSearchManager(self, didChangeSearchState: currentSearch)
             return
         }
         
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(newSearch(_:)), object: lastScheduledQuery)
-        
-        if query.isEmpty {
-            currentSearch = Search(query: "", page: initialPage, resultState: .loaded([]), hasMoreContent: false)
-            delegate?.movieSearchManager(self, didChangeSearchState: currentSearch)
-        } else {
-            scheduleNewSearch(query: query)
+        guard query != currentSearch.query else {
+            return
         }
+        
+        scheduleNewSearch(query: query)
     }
     
     fileprivate func scheduleNewSearch(query: String) {
@@ -86,7 +90,7 @@ class MovieSearchManager: NSObject, UISearchResultsUpdating {
     }
     
     @objc func newSearch(_ query: String) {
-        guard isCurrentQuery(query) else {
+        guard query == lastScheduledQuery else {
             return
         }
         
@@ -112,14 +116,16 @@ class MovieSearchManager: NSObject, UISearchResultsUpdating {
         currentSearch.resultState = .loading
         delegate?.movieSearchManager(self, didChangeSearchState: currentSearch)
         
-        provider.searchForMovie(query: currentSearch.query, page: currentSearch.page) {
+        let search = currentSearch
+        
+        provider.searchForMovie(query: search.query, page: search.page) {
             [weak self] (result) in
             
             guard let weak = self else {
                 return
             }
             
-            guard weak.isCurrentQuery(weak.currentSearch.query) else {
+            guard search.query == weak.currentSearch.query else {
                 return
             }
             
@@ -135,9 +141,5 @@ class MovieSearchManager: NSObject, UISearchResultsUpdating {
                 weak.delegate?.movieSearchManager(weak, didChangeSearchState: weak.currentSearch)
             }
         }
-    }
-    
-    fileprivate func isCurrentQuery(_ query: String) -> Bool {
-        return query == searchController.searchBar.text
     }
 }
