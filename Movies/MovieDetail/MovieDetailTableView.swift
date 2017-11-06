@@ -8,25 +8,31 @@
 
 import Foundation
 
-class MovieDetailField {
-    
-    let fieldName: String
-    let fieldDescription: String
-    
-    init(name: String, description: String) {
-        self.fieldName = name
-        self.fieldDescription = description
-    }
-}
 
-class MovieDetailFieldCell: UITableViewCell {
+class MovieDetailTableViewManager: NSObject, UITableViewDataSource {
     
-    @IBOutlet private weak var fieldNameLabel: UILabel!
-    @IBOutlet private weak var fieldDescriptionLabel: UILabel!
+    var sections: [MovieDetailTableSection]?
     
-    func updateView(for model: MovieDetailField) {
-        fieldNameLabel.text = model.fieldName
-        fieldDescriptionLabel.text = model.fieldDescription
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let sections = sections else {
+            return 0
+        }
+        
+        return sections[section].fields.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: R.reuseIdentifier.movieDetailFieldCell, for: indexPath) else {
+            fatalError("Failed to retrieve cell from storyboard")
+        }
+        
+        let field = sections![indexPath.section].fields[indexPath.row]
+        cell.updateView(for: field)
+        return cell
     }
 }
 
@@ -54,14 +60,14 @@ class MovieDetailTableSection {
     
     fileprivate static func makeAboutSection(_ movie: MovieModel) -> MovieDetailTableSection {
         var fields = [MovieDetailField]()
-        fields.append(MovieDetailField(name: "Rated", description: movie.rated))
-        fields.append(MovieDetailField(name: "Released", description: movie.released))
-        fields.append(MovieDetailField(name: "Runtime", description: movie.runtime))
         fields.append(MovieDetailField(name: "Genre", description: movie.genre))
+        fields.append(MovieDetailField(name: "Plot", description: movie.plot))
+        fields.append(MovieDetailField(name: "Rated", description: movie.rated))
+        fields.append(MovieDetailField(name: "Runtime", description: movie.runtime))
+        fields.append(MovieDetailField(name: "Released", description: movie.released))
         fields.append(MovieDetailField(name: "Director", description: movie.director))
         fields.append(MovieDetailField(name: "Writer", description: movie.writer))
         fields.append(MovieDetailField(name: "Actors", description: movie.actors))
-        fields.append(MovieDetailField(name: "Plot", description: movie.plot))
         fields.append(MovieDetailField(name: "Language", description: movie.language))
         fields.append(MovieDetailField(name: "Country", description: movie.country))
         
@@ -76,5 +82,27 @@ class MovieDetailTableSection {
         fields.append(MovieDetailField(name: "Imdb Votes", description: movie.imdbVotes))
         
         return MovieDetailTableSection(fields: fields, type: .critics)
+    }
+}
+
+class MovieDetailField {
+    
+    let fieldName: String
+    let fieldDescription: String
+    
+    init(name: String, description: String) {
+        self.fieldName = name
+        self.fieldDescription = description
+    }
+}
+
+class MovieDetailFieldCell: UITableViewCell {
+    
+    @IBOutlet private weak var fieldNameLabel: UILabel!
+    @IBOutlet private weak var fieldDescriptionLabel: UILabel!
+    
+    func updateView(for model: MovieDetailField) {
+        fieldNameLabel.text = model.fieldName
+        fieldDescriptionLabel.text = model.fieldDescription
     }
 }

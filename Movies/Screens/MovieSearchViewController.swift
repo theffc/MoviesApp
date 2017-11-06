@@ -77,21 +77,7 @@ class MovieSearchViewController: UIViewController, MovieSearchManagerDelegate {
         })
         
         tableView.infiniteScrollIndicatorMargin = 20
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        makeSearchBarActive()
-    }
-    
-    fileprivate func makeSearchBarActive() {
-        searchController.isActive = true
-        // async because we need to call only when the searchController presentation ends (which was triggered by setting isActive to true), and, without async, we could't achieve that.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.searchController.searchBar.becomeFirstResponder()
-        }
-    }
+    }    
     
     func movieSearchManager(_ manager: MovieSearchManager, didChangeSearchState search: MovieSearchManager.Search) {
         switch search.resultState {
@@ -149,24 +135,26 @@ extension MovieSearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
-        let provider = MoyaProvider<OmdbApi>()
-        print(movie.imdbId)
-        provider.request(.movie(id: movie.imdbId)) { (result) in
-            switch result {
-            case let .failure(error):
-                print(error)
-            case let .success(value):
-                let str = String(data: value.data, encoding: .utf8)!
-                //print(str)
-                
-                do {
-                    let r = try value.map(MovieModel.self)
-                    //print(r)
-                } catch {
-                    print(error)
-                }
-            }
-        }
+        let vc = MovieDetailViewController.staticInit(input: .movieSearch(movie))
+        show(vc, sender: self)
+//        let provider = MoyaProvider<OmdbApi>()
+//        print(movie.imdbId)
+//        provider.request(.movie(id: movie.imdbId)) { (result) in
+//            switch result {
+//            case let .failure(error):
+//                print(error)
+//            case let .success(value):
+//                let str = String(data: value.data, encoding: .utf8)!
+//                //print(str)
+//
+//                do {
+//                    let r = try value.map(MovieModel.self)
+//                    //print(r)
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//        }
     }
 }
 

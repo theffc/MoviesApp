@@ -34,28 +34,45 @@ class MovieDetailViewController: UIViewController {
     }
     
     @IBOutlet private weak var headerView: MovieDetailHeaderView!
-    @IBOutlet private weak var tableView: UITableView!
     
-    var sections: [MovieDetailTableSection]?
+    private let keyPathTableViewContentSize = #keyPath(UITableView.contentSize)
+    @IBOutlet private weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var tableView: UITableView! {
+        didSet {
+            tableView.dataSource = tableViewManager
+            tableView.isScrollEnabled = false
+            tableView.addObserver(self, forKeyPath: keyPathTableViewContentSize, options: .new, context: nil)
+        }
+    }
+    private var tableViewManager = MovieDetailTableViewManager()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateView(input: input)
+        updateView()
     }
     
-    func updateView(input: Input) {
-        switch input {
+    func updateView() {
+        switch input! {
         case let .completeMovie(movie):
             headerView.updateView(for: movie)
+            
+            let sections = MovieDetailTableSection.parseMovieModel(movie)
+            tableViewManager.sections = sections
+            tableView.reloadData()
+            
         case let .movieSearch(search):
             headerView.updateView(for: search)
-            tableView.isHidden = true
         }
     }
     
+    private var isRequestingCompleteMovie = false
     func requestCompleteMovie() {
+        guard !isRequestingCompleteMovie else {
+            return
+        }
+        
         guard case let .movieSearch(search)? = input else {
             return
         }
@@ -72,8 +89,21 @@ class MovieDetailViewController: UIViewController {
                 fatalError("YOU SHOULD HAVE HANDLED THE ERROR")
             case let .success(movie):
                 weak.input = .completeMovie(movie)
+                weak.updateView()
             }
         }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard keyPath == keyPathTableViewContentSize else {
+            return
+        }
+        
+        tableViewHeightConstraint.constant = tableView.contentSize.height
+    }
+    
+    deinit {
+        tableView?.removeObserver(self, forKeyPath: keyPathTableViewContentSize)
     }
 }
 
