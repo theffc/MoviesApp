@@ -55,6 +55,8 @@ class MovieSearchViewController: UIViewController, MovieSearchManagerDelegate {
         
         setupSearch()
         setupInfiniteScroll(in: tableView)
+        
+        navigationItem.title = "Pesquisar"
     }
     
     fileprivate func setupInfiniteScroll(in tableView: UITableView) {
@@ -137,24 +139,6 @@ extension MovieSearchViewController: UITableViewDelegate {
         let movie = movies[indexPath.row]
         let vc = MovieDetailViewController.staticInit(input: .movieSearch(movie))
         show(vc, sender: self)
-//        let provider = MoyaProvider<OmdbApi>()
-//        print(movie.imdbId)
-//        provider.request(.movie(id: movie.imdbId)) { (result) in
-//            switch result {
-//            case let .failure(error):
-//                print(error)
-//            case let .success(value):
-//                let str = String(data: value.data, encoding: .utf8)!
-//                //print(str)
-//
-//                do {
-//                    let r = try value.map(MovieModel.self)
-//                    //print(r)
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
     }
 }
 

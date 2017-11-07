@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Result
 
 class MovieDetailViewController: UIViewController {
 
@@ -15,6 +15,12 @@ class MovieDetailViewController: UIViewController {
     enum Input {
         case completeMovie(MovieModel)
         case movieSearch(MovieSearchModel)
+    }
+    
+    var loadableMovie: Loadable<MovieModel, AnyError>! {
+        didSet {
+            updateViewForLoadableMovie()
+        }
     }
     
     var provider: MovieModelProviderType = MovieModelRemoteProvider()
@@ -26,8 +32,11 @@ class MovieDetailViewController: UIViewController {
         
         me.input = input
         
-        if case .movieSearch(_) = input {
+        switch input {
+        case .movieSearch(_):
             me.requestCompleteMovie()
+        case let .completeMovie(movie):
+            me.loadableMovie = .loaded(movie)
         }
         
         return me
@@ -41,6 +50,7 @@ class MovieDetailViewController: UIViewController {
             tableViewHeightConstraint.constant = 0
         }
     }
+    
     @IBOutlet private weak var tableView: UITableView! {
         didSet {
             tableView.dataSource = tableViewManager
@@ -48,6 +58,7 @@ class MovieDetailViewController: UIViewController {
             tableView.addObserver(self, forKeyPath: keyPathTableViewContentSize, options: .new, context: nil)
         }
     }
+    
     private var tableViewManager = MovieDetailTableViewManager()
     
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
@@ -56,33 +67,48 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        updateView()
-    }
-    
-    func updateView() {
         switch input! {
         case let .completeMovie(movie):
             headerView.updateView(for: movie)
-            
-            tableView.isHidden = false
+            navigationItem.title = movie.title
+        case let .movieSearch(search):
+            headerView.updateView(for: search)
+            navigationItem.title = search.title
+        }
+    }
+    
+    fileprivate func updateViewForLoadableMovie() {
+        loadViewIfNeeded()
+        
+        switch loadableMovie! {
+        case .error(_) :
+            errorView.isHidden = false
             activityIndicator.stopAnimating()
+            tableView.isHidden = true
+            
+         case .loading:
             errorView.isHidden = true
+            activityIndicator.startAnimating()
+            tableView.isHidden = true
+            
+        case let .loaded(movie):
+            errorView.isHidden = true
+            activityIndicator.stopAnimating()
+            tableView.isHidden = false
             
             let sections = MovieDetailTableSection.parseMovieModel(movie)
             tableViewManager.sections = sections
             tableView.reloadData()
-            
-        case let .movieSearch(search):
-            headerView.updateView(for: search)
-            
-            activityIndicator.startAnimating()
-            tableView.isHidden = true
-            errorView.isHidden = true
         }
     }
     
+    @IBAction func didTapToTryAgainOnError(_ sender: UIButton) {
+        requestCompleteMovie()
+    }
+    
+    
     private var isRequestingCompleteMovie = false
-    func requestCompleteMovie() {
+    private func requestCompleteMovie() {
         guard !isRequestingCompleteMovie else {
             return
         }
@@ -91,6 +117,8 @@ class MovieDetailViewController: UIViewController {
             return
         }
         
+        loadableMovie = .loading
+        
         provider.requestMovie(id: search.imdbId) {
             [weak self] result in
             guard let weak = self else {
@@ -98,12 +126,10 @@ class MovieDetailViewController: UIViewController {
             }
             
             switch result {
-            case .failure(_):
-                // TODO: Handle error
-                fatalError("YOU SHOULD HAVE HANDLED THE ERROR")
+            case let .failure(error):
+                weak.loadableMovie = .error(error)
             case let .success(movie):
-                weak.input = .completeMovie(movie)
-                weak.updateView()
+                weak.loadableMovie = .loaded(movie)
             }
         }
     }

@@ -36,8 +36,16 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.nib` struct is generated, and contains static references to 0 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 1 nibs.
   struct nib {
+    /// Nib `MovieDetailTableHeaderView`.
+    static let movieDetailTableHeaderView = _R.nib._MovieDetailTableHeaderView()
+    
+    /// `UINib(name: "MovieDetailTableHeaderView", in: bundle)`
+    static func movieDetailTableHeaderView(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.movieDetailTableHeaderView)
+    }
+    
     fileprivate init() {}
   }
   
@@ -100,6 +108,17 @@ struct _R: Rswift.Validatable {
   }
   
   struct nib {
+    struct _MovieDetailTableHeaderView: Rswift.NibResourceType {
+      let bundle = R.hostingBundle
+      let name = "MovieDetailTableHeaderView"
+      
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> MovieDetailTableHeaderView? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? MovieDetailTableHeaderView
+      }
+      
+      fileprivate init() {}
+    }
+    
     fileprivate init() {}
   }
   

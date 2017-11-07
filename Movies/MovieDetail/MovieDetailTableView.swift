@@ -9,19 +9,15 @@
 import Foundation
 
 
-class MovieDetailTableViewManager: NSObject, UITableViewDataSource {
+class MovieDetailTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
     
-    var sections: [MovieDetailTableSection]?
+    var sections: [MovieDetailTableSection] = []
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections?.count ?? 0
+        return sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = sections else {
-            return 0
-        }
-        
         return sections[section].fields.count
     }
     
@@ -30,9 +26,18 @@ class MovieDetailTableViewManager: NSObject, UITableViewDataSource {
             fatalError("Failed to retrieve cell from storyboard")
         }
         
-        let field = sections![indexPath.section].fields[indexPath.row]
+        let field = sections[indexPath.section].fields[indexPath.row]
         cell.updateView(for: field)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch sections[section].type {
+        case .about:
+            return "Sobre"
+        case .critics:
+            return "Críticas"
+        }
     }
 }
 
@@ -105,4 +110,9 @@ class MovieDetailFieldCell: UITableViewCell {
         fieldNameLabel.text = model.fieldName
         fieldDescriptionLabel.text = model.fieldDescription
     }
+}
+
+class MovieDetailTableHeaderView: UITableViewHeaderFooterView {
+    
+    @IBOutlet weak var sectionLabel: UILabel!
 }
